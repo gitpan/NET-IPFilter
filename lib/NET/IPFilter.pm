@@ -2,7 +2,6 @@ package NET::IPFilter;
 
 use Carp;
 use strict;
-use 5.008008;
 use HTTP::Request;
 use LWP::UserAgent;
 use Compress::Zlib;

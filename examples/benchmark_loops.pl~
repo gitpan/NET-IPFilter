@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-system("clear");
 use Benchmark;
 
 # declare array
