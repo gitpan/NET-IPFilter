@@ -2,6 +2,7 @@ package NET::IPFilter;
 
 use Carp;
 use strict;
+# use 5.008008;
 use HTTP::Request;
 use LWP::UserAgent;
 use Compress::Zlib;
@@ -45,7 +46,7 @@ our @EXPORT = qw(
 	_init
 );
 
-our $VERSION = '1.0';
+our $VERSION = '1.2';
 
 
 ######
@@ -78,33 +79,19 @@ sub isValid(){
 	my $IPtoCheck		= $self->_ip2long(shift); 
 	my $RangesArrayRef	= $self->{'_IPRANGES_ARRAY_REF'};
 	my $howmany		= scalar( @{$RangesArrayRef} );
-	my $count 		= 0;
-
+	
 	# $IPtoCheck 		= Math::BigInt->new($IPtoCheck);
 
 	for ( my $count=0; $count<=$howmany; $count++) {
 		
 		my ($RangFrom, $RangTo) = split("-", $RangesArrayRef->[$count]);
-	# BUGGY:	
-	#	# print "raenge $RangesArrayRef->[$count] \n";
-	#	if ( $IPtoCheck == $RangFrom || $IPtoCheck == $RangTo ) {
-	#		return 0;	# to be blocked
-	#	};
-	#	if ( $IPtoCheck > $RangFrom && $IPtoCheck < $RangTo ) {
-	#		return 0;	# to be blocked
-	#	}; # if ( $IPtoCheck > $RangTo || $IPtoCheck < $RangFrom ) {
-
-		if ( $IPtoCheck > $RangFrom && $IPtoCheck < $RangTo ) {
-			return 0;	# to be blocked
-		} elsif ( $IPtoCheck <=> $RangFrom || $IPtoCheck <=> $RangTo ) {
-			return 0;	# to be blocked
-		}; # if ( $IPtoCheck > $RangTo || $IPtoCheck < $RangFrom ) {
-
-		$count++;
+	
+		if ( $IPtoCheck >= $RangFrom && $IPtoCheck <= $RangTo ) {
+			return 0;
+		};
 
 	}; # for ( my $count=0; $count<=$howmany; $count++) {
 
-	# print " $IPtoCheck \n";
 	return 1;	# if ip not found in ipfilter.dat its valid
 
 }; # sub isValid(){
@@ -133,8 +120,6 @@ sub readIPFilterFile(){
 		$IP_End =~ s/^\s+//;
 		$IP_End =~ s/\s+$//;				
 		
-		($IP_Start, $IP_End) 	= split("-", $IPRange );
-
 		# beautifyRawIPfromIPFilter is not needed
 	#	my $IPStart 		= $self->beautifyRawIPfromIPFilter( $IP_Start );
 	#	my $IPEnd		= $self->beautifyRawIPfromIPFilter( $IP_End );
@@ -455,6 +440,8 @@ __END__
 
 NET::IPFilter - Perl extension for Accessing eMule / Bittorrent IPFilter.dat Files and checking a given IP against this ipfilter.dat IP Range. IT uses conversion from IP to long integers in Perl and afterwards compairing these long integer
 ranges against the calculated number of the given IP
+
+Warning: Please Update your Sources. Current Version fixed a very critical bug that prevents Program from working correctly.
 
 =head1 SYNOPSIS
 

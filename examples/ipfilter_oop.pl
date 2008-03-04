@@ -34,9 +34,9 @@ print "_init():: Time taken was ", timestr($diff_init, 'all'), " seconds\n";
 #######
 ### CHECK()
 #######
-# 199.196.016.000-199.196.031.255,090,[L1]N.Y.S. Department of
+# 024.199.196.184-024.199.196.191,109,[L2]NORTEL-SOFTSWITCH-WA
 
-my $IP 		= "199.196.016.200";
+my $IP 		= "024.199.196.184";
 my $start_chk 	= Benchmark->new();
 
 my $isValid 	= $obj->isValid($IP);	#  1 not to be blocked | 0 to be blocked
